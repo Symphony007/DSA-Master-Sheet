@@ -29,26 +29,25 @@ function saveProgress(data: ProgressData): void {
 }
 
 export function useProgress() {
-  // ── Always start with DEFAULT_PROGRESS on both server and client ──────────
-  // This prevents the SSR/hydration mismatch. We load from localStorage
-  // in a useEffect after mount (client-only).
+  // Always start with DEFAULT_PROGRESS so server and client render identically.
+  // Loading from localStorage here would cause a hydration mismatch because
+  // the server has no localStorage and renders DEFAULT_PROGRESS.
   const [progress, setProgress] = useState<ProgressData>(DEFAULT_PROGRESS);
-  const [hydrated, setHydrated] = useState(false);
 
+  // After mount (client only), sync state from localStorage.
+  // This is the correct Next.js pattern for localStorage — two renders,
+  // but no hydration mismatch. The eslint rule is disabled here because
+  // this is an intentional "sync from external store on mount" pattern,
+  // which is one of the documented valid use cases for setState in an effect.
   useEffect(() => {
-    // Runs only on the client, after first render — safe to read localStorage.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgress(loadProgress());
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setHydrated(true);
   }, []);
 
-  // Persist to localStorage whenever progress changes (after hydration only)
+  // Persist to localStorage whenever progress changes.
   useEffect(() => {
-    if (hydrated) {
-      saveProgress(progress);
-    }
-  }, [progress, hydrated]);
+    saveProgress(progress);
+  }, [progress]);
 
   // ── actions ────────────────────────────────────────────────────────────────
 
@@ -59,7 +58,7 @@ export function useProgress() {
         ...prev.problems,
         [problemId]: {
           solved: !prev.problems[problemId]?.solved,
-          note:    prev.problems[problemId]?.note ?? "",
+          note:   prev.problems[problemId]?.note ?? "",
         },
       },
     }));
@@ -107,8 +106,8 @@ export function useProgress() {
   const totalSolved = Object.values(progress.problems).filter(p => p.solved).length;
 
   return {
-    lang:        progress.lang,
-    activePhase: progress.activePhase,
+    lang:         progress.lang,
+    activePhase:  progress.activePhase,
     totalSolved,
     isSolved,
     getNote,

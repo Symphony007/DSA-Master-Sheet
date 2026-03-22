@@ -46,7 +46,6 @@ export default function Header({
         >
           {/* left — logo + wordmark + stats */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-            {/* Logo */}
             <Image
               src="/logo.png"
               alt="MyDSA logo"
@@ -55,8 +54,6 @@ export default function Header({
               style={{ objectFit: "contain", flexShrink: 0 }}
               priority
             />
-
-            {/* Wordmark + stats */}
             <div style={{ minWidth: 0 }}>
               <div
                 style={{
@@ -100,7 +97,7 @@ export default function Header({
           {/* right — lang switcher + reset */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
 
-            {/* language switcher */}
+            {/* language switcher — Python / Java */}
             <div
               style={{
                 display:      "flex",
@@ -170,7 +167,7 @@ export default function Header({
           </div>
         </div>
 
-        {/* ── overall progress bar ────────────────────────────────────────── */}
+        {/* ── overall progress bar ──────────────────────────────────────── */}
         <div className="progress-track">
           <div
             className={`progress-fill ${complete ? "progress-fill--complete" : "progress-fill--active"}`}

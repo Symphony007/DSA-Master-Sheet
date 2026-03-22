@@ -3,12 +3,11 @@
 import { useState } from "react";
 import PHASES from "@/data/problems";
 import { useProgress } from "@/hooks/useProgress";
-import { Lang } from "@/types";
 
-import Header      from "@/components/Header";
-import PhaseNav    from "@/components/PhaseNav";
-import PhaseCard   from "@/components/PhaseCard";
-import ResetModal  from "@/components/ResetModal";
+import Header     from "@/components/Header";
+import PhaseNav   from "@/components/PhaseNav";
+import PhaseCard  from "@/components/PhaseCard";
+import ResetModal from "@/components/ResetModal";
 
 const TOTAL_PROBLEMS = PHASES.flatMap(ph =>
   ph.sections.flatMap(s => s.patterns.flatMap(g => g.problems))
@@ -16,26 +15,22 @@ const TOTAL_PROBLEMS = PHASES.flatMap(ph =>
 
 export default function Page() {
   const {
-    lang,
     activePhase,
     totalSolved,
     isSolved,
     getNote,
     toggleSolved,
     setNote,
-    setLang,
     setActivePhase,
     resetAll,
+    lang,
+    setLang,
   } = useProgress();
 
   const [showReset, setShowReset] = useState(false);
 
   function handlePhaseSelect(phaseId: number) {
     setActivePhase(activePhase === phaseId ? 0 : phaseId);
-  }
-
-  function handleLangChange(l: Lang) {
-    setLang(l);
   }
 
   function handleConfirmReset() {
@@ -49,7 +44,7 @@ export default function Page() {
         totalSolved={totalSolved}
         totalProblems={TOTAL_PROBLEMS}
         lang={lang}
-        onLangChange={handleLangChange}
+        onLangChange={setLang}
         onResetClick={() => setShowReset(true)}
       />
 
@@ -60,7 +55,6 @@ export default function Page() {
           padding:  "24px 24px 80px",
         }}
       >
-        {/* Two-column layout on wide screens */}
         <div
           style={{
             display:             "grid",
@@ -69,14 +63,8 @@ export default function Page() {
             alignItems:          "start",
           }}
         >
-          {/* Left — sticky phase nav */}
-          <div
-            style={{
-              position:  "sticky",
-              top:       80,
-              alignSelf: "start",
-            }}
-          >
+          {/* left — sticky phase nav */}
+          <div style={{ position: "sticky", top: 80, alignSelf: "start" }}>
             <div
               style={{
                 fontSize:      10,
@@ -100,25 +88,24 @@ export default function Page() {
             />
           </div>
 
-          {/* Right — phase cards */}
+          {/* right — phase cards */}
           <div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {PHASES.map(phase => (
                 <PhaseCard
                   key={phase.id}
                   phase={phase}
-                  lang={lang}
                   active={activePhase === phase.id}
                   isSolved={isSolved}
                   getNote={getNote}
                   onToggle={toggleSolved}
                   onSaveNote={setNote}
                   onActivate={() => handlePhaseSelect(phase.id)}
+                  lang={lang}
                 />
               ))}
             </div>
 
-            {/* footer */}
             <div
               style={{
                 marginTop:  48,
@@ -131,8 +118,8 @@ export default function Page() {
                 lineHeight: 1.8,
               }}
             >
-              <div>{TOTAL_PROBLEMS} problems · 13 phases · progress saved locally</div>
-              <div style={{ marginTop: 4 }}>built for focused, structured DSA prep</div>
+              <div>{TOTAL_PROBLEMS} problems · 10 phases · Python · progress saved locally</div>
+              <div style={{ marginTop: 4 }}>built for structured, interview-focused DSA prep</div>
             </div>
           </div>
         </div>

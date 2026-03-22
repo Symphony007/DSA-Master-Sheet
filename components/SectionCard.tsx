@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Section, Lang } from "@/types";
+import { Section } from "@/types";
 import LearnBefore from "@/components/LearnBefore";
 import PatternGroup from "@/components/PatternGroup";
 
 interface SectionCardProps {
   section:     Section;
-  lang:        Lang;
   isSolved:    (id: number) => boolean;
+  lang:        import("@/types").Lang;
   getNote:     (id: number) => string;
   onToggle:    (id: number) => void;
   onSaveNote:  (id: number, val: string) => void;
@@ -17,16 +17,15 @@ interface SectionCardProps {
 
 export default function SectionCard({
   section,
-  lang,
   isSolved,
   getNote,
   onToggle,
   onSaveNote,
   defaultOpen,
+  lang,
 }: SectionCardProps) {
   const [open, setOpen] = useState(defaultOpen);
 
-  // ── derive progress for this section ──────────────────────────────────────
   const allProblems = section.patterns.flatMap(g => g.problems);
   const total       = allProblems.length;
   const solved      = allProblems.filter(p => isSolved(p.id)).length;
@@ -43,29 +42,24 @@ export default function SectionCard({
         background:    "var(--bg-surface)",
       }}
     >
-      {/* ── section header / toggle ──────────────────────────────────────── */}
+      {/* ── header ──────────────────────────────────────────────────────── */}
       <button
         onClick={() => setOpen(o => !o)}
         style={{
-          width:          "100%",
-          display:        "flex",
-          alignItems:     "center",
-          gap:            10,
-          padding:        "10px 14px",
-          background:     "var(--bg-surface)",
-          border:         "none",
-          cursor:         "pointer",
-          transition:     "background 0.15s ease",
-          textAlign:      "left",
+          width:      "100%",
+          display:    "flex",
+          alignItems: "center",
+          gap:        10,
+          padding:    "10px 14px",
+          background: "var(--bg-surface)",
+          border:     "none",
+          cursor:     "pointer",
+          transition: "background 0.15s ease",
+          textAlign:  "left",
         }}
-        onMouseEnter={e => {
-          e.currentTarget.style.background = "var(--bg-elevated)";
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.background = "var(--bg-surface)";
-        }}
+        onMouseEnter={e => { e.currentTarget.style.background = "var(--bg-elevated)"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = "var(--bg-surface)"; }}
       >
-        {/* chevron */}
         <span
           style={{
             fontSize:   10,
@@ -79,7 +73,6 @@ export default function SectionCard({
           ▶
         </span>
 
-        {/* title */}
         <span
           style={{
             flex:       1,
@@ -92,22 +85,13 @@ export default function SectionCard({
           {section.title}
         </span>
 
-        {/* right side — count + mini progress bar */}
         {total > 0 && (
-          <div
-            style={{
-              display:    "flex",
-              alignItems: "center",
-              gap:        10,
-              flexShrink: 0,
-            }}
-          >
-            {/* solved / total */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
             <span
               style={{
-                fontSize:   11,
-                fontFamily: "var(--font-mono)",
-                color:      complete
+                fontSize:           11,
+                fontFamily:         "var(--font-mono)",
+                color:              complete
                   ? "var(--clr-done)"
                   : solved > 0
                   ? "var(--clr-medium)"
@@ -117,8 +101,6 @@ export default function SectionCard({
             >
               {solved}/{total}
             </span>
-
-            {/* mini progress bar */}
             <div className="progress-track" style={{ width: 56 }}>
               <div
                 className={`progress-fill ${complete ? "progress-fill--complete" : ""}`}
@@ -132,11 +114,7 @@ export default function SectionCard({
       {/* ── body ────────────────────────────────────────────────────────── */}
       {open && (
         <div style={{ borderTop: "1px solid var(--border-subtle)" }}>
-
-          {/* learn before panel */}
           <LearnBefore sectionId={section.id} lang={lang} />
-
-          {/* pattern groups */}
           {section.patterns.map(group => (
             <PatternGroup
               key={group.name}

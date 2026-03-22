@@ -12,15 +12,15 @@ export const metadata: Metadata = {
   authors: [{ name: "MyDSA" }],
   icons: {
     icon: [
-      { url: "/favicon.png", type: "image/png", sizes: "64x64" },
+      { url: "/favicon.png",    type: "image/png", sizes: "64x64" },
       { url: "/favicon-64.png", type: "image/png", sizes: "64x64" },
     ],
     apple: "/favicon.png",
   },
   openGraph: {
-    title: "MyDSA — Structured DSA Progress Tracker",
+    title:       "MyDSA — Structured DSA Progress Tracker",
     description: "286 problems. 13 phases. Concept-gated and interview-focused.",
-    type: "website",
+    type:        "website",
   },
 };
 
@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }
